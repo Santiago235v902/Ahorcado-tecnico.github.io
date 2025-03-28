@@ -13,6 +13,7 @@
             height: 100vh;
         }
       body {
+        margin: 0;
         text-align: center;
     font-family: Arial, sans-serif;
     background: linear-gradient(270deg, #f8685e, #fdb851, #ecff7e);
@@ -116,7 +117,7 @@
 
 
     <h1>Tiempo: <span id="timer">5:00</span> | Nivel: <span id="nivel">1</span></h1>
-
+    <canvas id="ahorcadoCanvas" width="200" height="250"></canvas>
     <div class="respuesta" id="palabra"></div>
     <div class="letras-usadas" id="letrasUsadas"></div>
 
@@ -140,6 +141,12 @@
         buttons.forEach(button => button.style.animation = 'none');
         const headings = document.querySelectorAll('h1');
         headings.forEach(heading => heading.style.animation = 'none');
+
+        // Set canvas background to white for visibility
+        const canvas = document.getElementById("ahorcadoCanvas");
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         });
         // Juego script
 
@@ -209,19 +216,27 @@
                     letrasIngresadas.add(letra);
                     letrasUsadasDiv.textContent = "Letras usadas: " + [...letrasIngresadas].join(", ");
 
+                    let letraIncorrecta = true; // Flag to check if the guess is incorrect
                     for (let i = 0; i < palabraSecreta.length; i++) {
                         if (palabraSecreta[i] === letra) {
                             palabraAdivinada[i] = letra;
+                            letraIncorrecta = false; // Correct guess
                         }
                     }
 
                     palabraDiv.textContent = palabraAdivinada.join(" ");
+
+                    if (letraIncorrecta) {
+                        errores++; // Increment errors for incorrect guesses
+                        dibujarAhorcado(); // Call the function to draw the hangman
+                    }
 
                     if (!palabraAdivinada.includes("_")) {
                         clearInterval(timerInterval);
                         alert("¡Bien hecho! Pasas al siguiente nivel.");
                         nivel++;
                         iniciarJuego();
+                        limpiarCanvas(); // Limpiar el dibujo al reiniciar el juego
                     }
                 }
             }
@@ -232,7 +247,90 @@
             btnPista.disabled = true;
         });
 
-        iniciarJuego();
+        iniciarJuego(); 
+        
+        const canvas = document.getElementById("ahorcadoCanvas");
+        const ctx = canvas.getContext("2d");
+        let errores = 0;
+
+    function dibujarAhorcado() {
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "black";
+
+        switch (errores) {
+            case 1: // Base
+                ctx.beginPath();
+                ctx.moveTo(20, 230);
+                ctx.lineTo(180, 230);
+                ctx.stroke();
+                break;
+            case 2: // Poste vertical
+                ctx.beginPath();
+                ctx.moveTo(50, 230);
+                ctx.lineTo(50, 20);
+                ctx.stroke();
+                break;
+            case 3: // Soporte superior
+                ctx.beginPath();
+                ctx.moveTo(50, 20);
+                ctx.lineTo(120, 20);
+                ctx.stroke();
+                break;
+            case 4: // Cuerda
+                ctx.beginPath();
+                ctx.moveTo(120, 20);
+                ctx.lineTo(120, 50);
+                ctx.stroke();
+                break;
+            case 5: // Cabeza
+                ctx.beginPath();
+                ctx.arc(120, 70, 20, 0, Math.PI * 2);
+                ctx.stroke();
+                break;
+            case 6: // Cuerpo
+                ctx.beginPath();
+                ctx.moveTo(120, 90);
+                ctx.lineTo(120, 150);
+                ctx.stroke();
+                break;
+            case 7: // Brazo izquierdo
+                ctx.beginPath();
+                ctx.moveTo(120, 110);
+                ctx.lineTo(90, 130);
+                ctx.stroke();
+                break;
+            case 8: // Brazo derecho
+                ctx.beginPath();
+                ctx.moveTo(120, 110);
+                ctx.lineTo(150, 130);
+                ctx.stroke();
+                break;
+            case 9: // Pierna izquierda
+                ctx.beginPath();
+                ctx.moveTo(120, 150);
+                ctx.lineTo(100, 200);
+                ctx.stroke();
+                break;
+            case 10: // Pierna derecha (fin del juego)
+                ctx.beginPath();
+                ctx.moveTo(120, 150);
+                ctx.lineTo(140, 200);
+                ctx.stroke();
+                setTimeout(() => {
+                    alert("¡Has perdido! La palabra era: " + palabraSecreta);
+                    nivel = 0;
+                    iniciarJuego();
+                    limpiarCanvas(); // Limpiar el dibujo al reiniciar el juego
+                }, 500);
+                break;
+        }
+    }
+    
+    function limpiarCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        errores = 0; // Reiniciar errores
+        }
+
     </script>
 </body>
 </html>
