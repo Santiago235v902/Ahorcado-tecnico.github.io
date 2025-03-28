@@ -1,0 +1,156 @@
+
+<!--TODOS LOS DERECHOS SON RESERVADOS SANTIAGO VILURON-->
+<!--&copy; 2023 Santiago Vilurón. Todos los derechos reservados.-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahorcado</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 60px;
+            color: #dd9ff8;
+            animation: moveUpDown 2s ease-in-out infinite;
+            text-shadow: #f542fc 0px 0px 5px, #ba54e6 0px 0px 15px, #bd69e0 0px 0px 30px;
+        }
+
+        @keyframes moveUpDown {
+            0% {
+                transform: translateY(10);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+
+
+        }
+
+        body {
+            margin: 0;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1d97e9, #8e44ad, #f8685e, #fdb851, #ecff7e);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            animation: animation 2s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        @keyframes animation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 50% 0%; }
+        100% { background-position: 0% 50%; }
+        }
+
+        button {
+            font-size: 20px;
+            padding: 10px;
+            margin-top: 30px;
+            cursor: pointer;
+            border: none;
+            background-color:#814d97;
+            color: rgb(255, 255, 255);
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            transition:0.5s;
+            animation: moveUpDown 2s ease-in-out infinite;
+        }
+
+        button:hover {  
+            box-shadow: 0 0 2px #ffffff7a, 0 0 20px #ffffff85, 0 0 20px #bd69e0, 0 0 20px #bd69e0, 0 0 10px #bd69e0;
+            text-shadow: #ffffff 0px 0px 5px, #ba54e6 0px 0px 15px, #bd69e0 0px 0px 30px;
+            background-color: #99309c;
+        }
+        main{
+            background-color: #fcfcfc00;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .black{
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            background: none; 
+            border: none; 
+            cursor: pointer;
+            animation: none;
+        }
+        .black:hover{
+        box-shadow: #ba54e600 0px 0px 5px, #ba54e600 0px 0px 15px, #ba54e600 0px 0px 30px;
+        }
+        #blackModeButton img {
+            width: 30px; /* Adjust the width as needed */
+            height: 30px; /* Adjust the height as needed */
+        }
+    </style>
+</head>
+<body>
+    <button type="button" class="black" id="blackModeButton">
+        <img src="https://cdn-icons-png.flaticon.com/512/1828/1828774.png" alt="Black Mode">
+    </button>
+    <h1 style="font-size: 50px; ">Bienvenido al horcado</h1>
+    <h1>¿Qué estilo quieres jugar?</h1>
+    <main>
+   <a href="test.html"><button type="button">Test mode</button></a>
+   <a href="problemas.html"><button type="button">Clasificación de Problemas</button></a>
+    <a href="#" id="lockButton">
+        <button type="button">Elementos de problema</button>
+    </a>
+    <div id="lockAnimation" style="display: none; margin-top: 20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+    </div>
+
+    <script>
+        const lockButton = document.getElementById("lockButton");
+        const lockAnimation = document.getElementById("lockAnimation");
+
+        lockButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent navigation
+            lockAnimation.style.display = 'block';
+            lockAnimation.style.animation = 'shake 0.5s ease-in-out';
+
+            // Remove animation after it completes
+            setTimeout(() => {
+                lockAnimation.style.animation = '';
+            }, 800);
+        });
+
+        // Add keyframes for shake animation
+        const styleSheet = document.styleSheets[0];
+        styleSheet.insertRule(`
+            @keyframes shake {
+                0% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                50% { transform: translateX(5px); }
+                75% { transform: translateX(-5px); }
+                100% { transform: translateX(0); }
+            }
+        `, styleSheet.cssRules.length);
+    </script>
+    </main>
+</body>
+
+<script>
+    const blackMode = document.getElementById("blackModeButton");
+    blackMode.addEventListener('click', function() {
+        document.body.style.background = 'black';
+        document.body.style.animation = 'none';
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => button.style.animation = 'none');
+        const headings = document.querySelectorAll('h1');
+        headings.forEach(heading => heading.style.animation = 'none');
+    });
+</script>
+</html>
